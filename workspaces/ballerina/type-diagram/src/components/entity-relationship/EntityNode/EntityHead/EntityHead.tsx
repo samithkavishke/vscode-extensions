@@ -83,7 +83,7 @@ const ImportedLabel = styled.span`
 
 export function EntityHeadWidget(props: ServiceHeadProps) {
     const { engine, node, isSelected } = props;
-    const { setFocusedNodeId, onEditNode, goToSource } = useContext(DiagramContext);
+    const { setFocusedNodeId, onEditNode, goToSource, onNodeDelete } = useContext(DiagramContext);
 
     const displayName: string = node.getID()?.slice(node.getID()?.lastIndexOf(':') + 1);
     const isImported = !node?.entityObject?.editable;
@@ -102,6 +102,13 @@ export function EntityHeadWidget(props: ServiceHeadProps) {
             } else {
                 onEditNode(node.getID());
             }
+        }
+        setAnchorEl(null);
+    };
+
+    const onNodeDeleteWithConfirm = (showConfirm: boolean) => {
+        if (node?.entityObject?.editable && onNodeDelete) {
+            onNodeDelete(node.getID(), showConfirm);
         }
         setAnchorEl(null);
     };
@@ -127,6 +134,11 @@ export function EntityHeadWidget(props: ServiceHeadProps) {
                 id: "goToSource", 
                 label: "Source", 
                 onClick: () => onGoToSource()
+            },
+            {
+                id: "delete",
+                label: "Delete",
+                onClick: () => onNodeDeleteWithConfirm(true)
             }
         ] : []),
         {
@@ -137,7 +149,6 @@ export function EntityHeadWidget(props: ServiceHeadProps) {
     ];
 
     const isClickable = true;
-
 
     return (
         <CtrlClickGo2Source node={node.entityObject}>

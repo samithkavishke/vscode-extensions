@@ -43,6 +43,7 @@ interface TypeDiagramProps {
     showProblemPanel?: () => void;
     goToSource: (node: Type) => void
     onTypeEdit: (typeId: string, isGraphqlRoot?: boolean) => void;
+    onTypeDelete: (typeId: string, showConfirm: boolean) => void;
 }
 
 export function TypeDiagram(props: TypeDiagramProps) {
@@ -114,6 +115,26 @@ export function TypeDiagram(props: TypeDiagramProps) {
         setSelectedDiagramNode(nodeId);
     }
 
+    const onNodeDelete = (typeId: string, showConfirm: boolean) => {
+        console.log("Deleting node: ", selectedDiagramNode, showConfirm);
+        props.onTypeDelete(typeId, showConfirm);
+        // if (diagramEngine && diagramModel) { --- IGNORE ---
+        //     const selectedDiagramNode = diagramModel.getNode(selectedNodeId);
+        //     if (!selectedDiagramNode) {
+        //         console.warn("No node selected for deletion");           
+        //     const node = diagramModel.getNode(selectedDiagramNode);
+        //     if (node && node.entityObject?.editable) {
+        //         diagramModel.removeNode(node);
+        //         diagramEngine.repaintCanvas();
+        //         if (showConfirm) {
+        //             diagramEngine.getModel().getLayer(OverlayLayerModel.ID).showConfirmDelete(node.getID());
+        //         } else {
+        //             diagramEngine.getModel().getLayer(OverlayLayerModel.ID).hideConfirmDelete();
+        //         }
+        //     }
+        // }
+    }
+
     let ctx = {
         selectedNodeId: selectedDiagramNode,
         setSelectedNodeId: updateSelectionOnDiagram,
@@ -122,7 +143,8 @@ export function TypeDiagram(props: TypeDiagramProps) {
         focusedNodeId,
         setFocusedNodeId: updateFocusedNodeId,
         onEditNode: onTypeEdit,
-        goToSource
+        goToSource,
+        onNodeDelete
     }
 
     const refreshDiagram = () => {
