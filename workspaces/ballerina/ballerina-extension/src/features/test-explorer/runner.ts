@@ -29,12 +29,12 @@ import path from 'path';
 
 /**
  * Extract project path from a test item
- * Test IDs have the format: test:${projectPath}:${fileName}:${functionName}
+ * Test IDs have the format: test::${projectPath}::${fileName}::${functionName}
  */
 function getProjectPathFromTestItem(test: TestItem): string | undefined {
     if (isTestFunctionItem(test)) {
-        // Extract from test ID: test:${projectPath}:${fileName}:${functionName}
-        const parts = test.id.split(':');
+        // Extract from test ID: test::${projectPath}::${fileName}::${functionName}
+        const parts = test.id.split('::');
         if (parts.length >= 2  && parts[0] === 'test') {
             return parts[1];
         }

@@ -154,7 +154,7 @@ function createTests(response: TestsDiscoveryResponse, testController: TestContr
             const fileName: string = testFunc.lineRange.fileName;
             const resolvedProjectPath = projectPath || StateMachine.context().projectPath;
             const fileUri = Uri.file(path.join(resolvedProjectPath, fileName));
-            const testId = `test:${resolvedProjectPath}:${path.basename(fileUri.path)}:${testFunc.functionName}`;
+            const testId = `test::${resolvedProjectPath}::${path.basename(fileUri.path)}::${testFunc.functionName}`;
 
             // Create a test item for the test function
             const testItem = testController.createTestItem(testId, testFunc.functionName, fileUri);
@@ -245,9 +245,9 @@ export async function handleFileDelete(uri: Uri, testController: TestController)
 
     // Helper function to check if a test belongs to the specific file in the specific project
     const belongsToFile = (testItem: TestItem): boolean => {
-        // Test ID format: test:${projectPath}:${fileName}:${functionName}
+        // Test ID format: test::${projectPath}::${fileName}::${functionName}
         // We need to match both the project path and the filename
-        return testItem.id.startsWith(`test:${targetProjectPath}:${fileName}:`);
+        return testItem.id.startsWith(`test::${targetProjectPath}::${fileName}::`);
     };
 
     // Helper function to delete tests from a test group item
@@ -325,8 +325,8 @@ export async function handleFileDelete(uri: Uri, testController: TestController)
 }
 
 export function isTestFunctionItem(item: TestItem): boolean {
-    // Test function items have IDs starting with "test:"
-    return item.id.startsWith('test:');
+    // Test function items have IDs starting with "test::"
+    return item.id.startsWith('test::');
 }
 
 export function isTestGroupItem(item: TestItem): boolean {
